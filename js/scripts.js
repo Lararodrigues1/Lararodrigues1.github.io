@@ -9,17 +9,23 @@ import * as dat from 'three/addons/libs/lil-gui.module.min.js';
 
 //let stats = initStats();
 
+
+
+
 const ligths = new URL('../../assets/ligths.glb',
     import.meta.url);
 
-const floor = new URL('../../assets/floor.glb',
+const floor = new URL('../../assets/houses.glb',
     import.meta.url);
 
 const assetLoader = new GLTFLoader();
 
+const scene = new THREE.Scene();
 
 
 const renderer = new THREE.WebGLRenderer();
+
+renderer.shadowMap.enabled = true
 
 const gui = new dat.GUI();
 
@@ -47,10 +53,11 @@ gui.add(options, 'darkMode').name('Dark Mode').onChange(function(e) {
 });
 
 //add a tree
-assetLoader.load(ligths.href, function(gltf) {
+assetLoader.load(floor.href, function(gltf) {
         const model = gltf.scene;
         model.scale.set(20, 20, 20);
         model.position.set(10, 0, 0);
+
         model.castShadow = true;
         model.receiveShadow = true;
 
@@ -60,20 +67,34 @@ assetLoader.load(ligths.href, function(gltf) {
         console.error(error);
     };
 
-assetLoader.load(floor.href, function(gltf) {
-        const modelGeometry = gltf.scene;
-        const modelMaterial = new THREE.MeshBasictMaterial({ color: 0x994c00 });
-        const model = new THREE.Mesh(modelGeometry, modelMaterial);
-        model.scale.set(20, 20, 20);
-        model.position.set(10, 0, 0);
-        // model.castShadow = true;
-        // model.receiveShadow = true;
 
-        scene.add(model);
-    }), undefined,
-    function(error) {
-        console.error(error);
-    };
+
+// assetLoader.load(floor.href, function(gltf) {
+//         const model = gltf.scene;
+//         // const modelMaterial = new THREE.MeshBasictMaterial({ color: 0x994c00 });
+//         // const model = new THREE.Mesh(modelGeometry, modelMaterial);
+//         model.scale.set(20, 20, 20);
+//         model.position.set(10, 0, 0);
+//         // model.castShadow = true;
+//         // model.receiveShadow = true;
+
+//         scene.add(model);
+//     }), undefined,
+//     function(error) {
+//         console.error(error);
+//     };
+
+
+//add a plane to the scene
+const planeGeometry = new THREE.PlaneGeometry(310, 250, 250);
+const planeMaterial = new THREE.MeshLambertMaterial({ color: 0xcd853f });
+const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+plane.rotation.x = -0.5 * Math.PI;
+plane.position.set(5, 0, 0);
+plane.receiveShadow = true;
+plane.castShadow = true;
+scene.add(plane);
+
 
 //const house = new URL('../assets/cena_13.glb',import.meta.url);
 
@@ -83,7 +104,6 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 
 document.body.appendChild(renderer.domElement);
 
-const scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
@@ -114,7 +134,6 @@ sphere.position.set(-400, 300, 0);
 scene.add(sphere);
 
 
-renderer.shadowMap.enabled = true
 
 
 const animate = function(time) {
