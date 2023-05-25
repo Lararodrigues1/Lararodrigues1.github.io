@@ -54,7 +54,7 @@ scene.add(axesHelper);
 
 //add a light to the scene
 const light = new THREE.PointLight(0xffffff, 1, 1000);
-light.position.set(100, 200, 50);
+light.position.set(100, 100, 30);
 light.castShadow = true;
 scene.add(light);
 
@@ -63,7 +63,7 @@ const light2 = new THREE.AmbientLight(0xffffff, 0.5);
 scene.add(light2);
 
 
-camera.position.set(300, 200, 50);
+camera.position.set(50, 100, 200);
 controls.update();
 
 //background color
@@ -91,8 +91,8 @@ assetLoader.load(floor.href, function(gltf) {
 
 
 //add a plane to the scene
-const planeGeometry = new THREE.PlaneGeometry(310, 250, 250);
-const planeMaterial = new THREE.MeshLambertMaterial({ color: 0xcd853f });
+const planeGeometry = new THREE.PlaneGeometry(310, 250, 1);
+const planeMaterial = new THREE.MeshLambertMaterial({ color: 0x4c9900 });
 const plane = new THREE.Mesh(planeGeometry, planeMaterial);
 plane.rotation.x = -0.5 * Math.PI;
 plane.position.set(5, 0, 0);
@@ -101,68 +101,235 @@ plane.castShadow = true;
 scene.add(plane);
 
 
-//add a rectangle to the scene
-const rectangleGeometry = new THREE.BoxGeometry(10, 40, 8); //comprimento,altura,profundidade
-const rectangleMaterial = new THREE.MeshLambertMaterial({ color: 0x606060 });
-const rectangle = new THREE.Mesh(rectangleGeometry, rectangleMaterial);
-rectangle.position.set(70, 25, -11); //x,y,z
-rectangle.castShadow = true;
-rectangle.receiveShadow = true;
-scene.add(rectangle);
+function geometry(a, l, p, x, y, z) {
+    //add a rectangle to the scene
+    const rectangleGeometry = new THREE.BoxGeometry(a, l, p); //comprimento,altura,profundidade
+    const rectangleMaterial = new THREE.MeshLambertMaterial({ color: 0x606060 });
+    const rectangle = new THREE.Mesh(rectangleGeometry, rectangleMaterial);
+    rectangle.position.set(x, y, z); //x,y,z
+    rectangle.castShadow = true;
+    rectangle.receiveShadow = true;
+    scene.add(rectangle);
+}
+
+geometry(10, 40, 10, 70, 20, -13);
+geometry(20, 40, 10, 50, 20, 10);
+geometry(10, 40, 10, -48, 20, 74);
+
+geometry(18, 40, 10, -43, 20, -115);
+geometry(18, 40, 10, -115, 20, -60);
+geometry(18, 30, 10, -25, 15, 110);
+
+geometry(5, 10, 12, 68, 5, -58);
+geometry(5, 10, 12, 68, 5, -76);
+geometry(5, 10, 12, 44, 5, -58);
+geometry(5, 10, 12, 44, 5, -76);
+
+//casinhas pequeninas
+geometry(8, 10, 8, 23, 5, -78);
+geometry(8, 10, 8, 23, 5, -68);
+geometry(8, 10, 8, 23, 5, -58);
+geometry(8, 10, 8, 55, 5, 113);
+geometry(8, 10, 8, 45, 5, 113);
+geometry(8, 10, 8, 34, 5, 113);
+geometry(8, 10, 8, 23, 5, 113);
+
+geometry(12, 20, 8, 1, 10, 110);
+geometry(12, 20, 8, -49, 10, 110);
+geometry(8, 20, 12, 28, 10, 75);
+geometry(8, 20, 12, -105, 10, -78);
+geometry(19, 10, 19, -34, 5, -66);
+
+geometry(17, 7, 19, 70, 5, 66);
+geometry(15, 7, 19, 2, 5, 61);
+geometry(15, 7, 19, 2, 5, 61);
+geometry(13, 7, 18, -113, 5, 58);
+geometry(19, 7, 13, -109, 5, 112);
+geometry(17, 7, 15, -47, 5, 5);
+geometry(20, 5, 20, 133, 5, -68);
+//casinhas duplas
+geometry(8, 7, 9, 131, 4.5, 67);
+geometry(8, 7, 9, 131, 4.5, 67);
+geometry(6, 5, 6, 132, 4, 75);
+geometry(8, 7, 9, 131, 4.5, 7);
+geometry(6, 5, 6, 132, 4, 15);
+geometry(9, 7, 7, 131, 4.5, -115);
+geometry(6, 5, 7, 140, 4, -115);
+geometry(9, 7, 7, 60, 4.5, -115);
+geometry(6, 5, 7, 68, 4, -115);
+geometry(9, 7, 7, 31, 4.5, -115);
+geometry(6, 5, 7, 39, 4, -115);
+//casinhas compridas
+geometry(20, 7, 7, 135, 4.5, 110);
+geometry(7, 7, 20, 132, 4.5, -16);
+geometry(7, 7, 20, 132, 4.5, 40);
+
+//edificios em L
+geometry(15, 20, 8, -19, 11, 16);
+geometry(6, 20, 7, -14, 11, 11);
+
+geometry(15, 20, 8, 70, 11, 114);
+geometry(6, 20, 7, 75, 11, 109);
+
+geometry(15, 20, 8, -18, 11, -22);
+geometry(6, 20, 7, -23, 11, -17);
+
+geometry(15, 20, 7, -14, 11, -116);
+geometry(6, 20, 7, -18, 11, -111);
+
+geometry(15, 20, 8, -111, 11, -117);
+geometry(6, 20, 7, -116, 11, -111);
+
+//hospital
+geometry(20, 19, 35, -110, 10, 3);
 
 
-//add a rectangle to the scene
-const rectangleGeometry1 = new THREE.BoxGeometry(20, 40, 10); //comprimento,altura,profundidade
-const rectangleMaterial1 = new THREE.MeshLambertMaterial({ color: 0x606060 });
-const rectangle1 = new THREE.Mesh(rectangleGeometry1, rectangleMaterial1);
-rectangle1.position.set(50, 20, 10); //x,y,z
-rectangle1.castShadow = true;
-rectangle1.receiveShadow = true;
-scene.add(rectangle1);
 
-//add a rectangle to the scene
-const rectangleGeometry2 = new THREE.BoxGeometry(10, 40, 10); //comprimento,altura,profundidade
-const rectangleMaterial2 = new THREE.MeshLambertMaterial({ color: 0x606060 });
-const rectangle2 = new THREE.Mesh(rectangleGeometry2, rectangleMaterial2);
-rectangle2.position.set(-48, 20, 75); //x,y,z
-rectangle2.castShadow = true;
-rectangle2.receiveShadow = true;
-scene.add(rectangle2);
+//add a road to the scene
+function road(l, p, a, x, y, z) {
+    const roadGeometry = new THREE.BoxGeometry(l, p, a);
+    const roadMaterial = new THREE.MeshLambertMaterial({ color: 0xc0c0c0 });
+    const road = new THREE.Mesh(roadGeometry, roadMaterial);
+    road.position.set(x, y, z);
+    road.castShadow = true;
+    road.receiveShadow = true;
+    scene.add(road);
+}
 
-//add a rectangle to the scene
-const rectangleGeometry3 = new THREE.BoxGeometry(18, 40, 10); //comprimento,altura,profundidade
-const rectangleMaterial3 = new THREE.MeshLambertMaterial({ color: 0x606060 });
-const rectangle3 = new THREE.Mesh(rectangleGeometry3, rectangleMaterial3);
-rectangle3.position.set(-43, 20, -115); //x,y,z
-rectangle3.castShadow = true;
-rectangle3.receiveShadow = true;
-scene.add(rectangle3);
+road(310, 0.1, 20, 5, 0.1, 93);
+road(310, 0.1, 20, 5, 0.1, -95);
 
-//add a rectangle to the scene
-const rectangleGeometry4 = new THREE.BoxGeometry(18, 40, 10); //comprimento,altura,profundidade
-const rectangleMaterial4 = new THREE.MeshLambertMaterial({ color: 0x606060 });
-const rectangle4 = new THREE.Mesh(rectangleGeometry4, rectangleMaterial4);
-rectangle4.position.set(-120, 20, -60); //x,y,z
-rectangle4.castShadow = true;
-rectangle4.receiveShadow = true;
-scene.add(rectangle4);
+road(20, 0.1, 200, 105, 0.1, 0);
+road(20, 0.1, 200, -80, 0.1, 0);
 
-//add a rectangle to the scene
-const rectangleGeometry5 = new THREE.BoxGeometry(18, 30, 10); //comprimento,altura,profundidade
-const rectangleMaterial5 = new THREE.MeshLambertMaterial({ color: 0x606060 });
-const rectangle5 = new THREE.Mesh(rectangleGeometry5, rectangleMaterial5);
-rectangle5.position.set(-25, 15, 110); //x,y,z
-rectangle5.castShadow = true;
-rectangle5.receiveShadow = true;
-scene.add(rectangle5);
+road(166, 0.1, 20, 13, 0.1, 35);
+road(166, 0.1, 15, 13, 0.1, -40);
+
+//add road lines to the scene
+function roadLines(l, p, a, x, y, z) {
+    const roadLinesGeometry = new THREE.BoxGeometry(l, p, a);
+    const roadLinesMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff });
+    const roadLines = new THREE.Mesh(roadLinesGeometry, roadLinesMaterial);
+    roadLines.position.set(x, y, z);
+    roadLines.castShadow = true;
+    roadLines.receiveShadow = true;
+    scene.add(roadLines);
+}
+
+roadLines(20, 0.1, 2, -5, 0.2, 93);
+roadLines(20, 0.1, 2, -30, 0.2, 93);
+roadLines(20, 0.1, 2, -55, 0.2, 93);
+roadLines(20, 0.1, 2, -80, 0.2, 93);
+roadLines(20, 0.1, 2, -105, 0.2, 93);
+roadLines(20, 0.1, 2, -130, 0.2, 93);
+roadLines(5, 0.1, 2, -148, 0.2, 93);
+roadLines(20, 0.1, 2, 5, 0.2, 93);
+roadLines(20, 0.1, 2, 30, 0.2, 93);
+roadLines(20, 0.1, 2, 55, 0.2, 93);
+roadLines(20, 0.1, 2, 80, 0.2, 93);
+roadLines(20, 0.1, 2, 105, 0.2, 93);
+roadLines(20, 0.1, 2, 130, 0.2, 93);
+roadLines(15, 0.1, 2, 153, 0.2, 93);
+
+
+roadLines(5, 0.1, 2, -148, 0.2, -95);
+roadLines(20, 0.1, 2, -130, 0.2, -95);
+roadLines(20, 0.1, 2, -105, 0.2, -95);
+roadLines(20, 0.1, 2, -80, 0.2, -95);
+roadLines(20, 0.1, 2, -55, 0.2, -95);
+roadLines(20, 0.1, 2, -30, 0.2, -95);
+roadLines(10, 0.1, 2, -5, 0.2, -95);
+roadLines(20, 0.1, 2, 5, 0.2, -95);
+roadLines(20, 0.1, 2, 30, 0.2, -95);
+roadLines(20, 0.1, 2, 55, 0.2, -95);
+roadLines(20, 0.1, 2, 80, 0.2, -95);
+roadLines(20, 0.1, 2, 105, 0.2, -95);
+roadLines(20, 0.1, 2, 130, 0.2, -95);
+roadLines(15, 0.1, 2, 153, 0.2, -95);
+
+
+roadLines(2, 0.1, 20, 105, 0.2, 0);
+roadLines(2, 0.1, 20, 105, 0.2, 25);
+roadLines(2, 0.1, 20, 105, 0.2, 50);
+roadLines(2, 0.1, 20, 105, 0.2, 75);
+roadLines(2, 0.1, 20, 105, 0.2, -25);
+roadLines(2, 0.1, 20, 105, 0.2, -50);
+roadLines(2, 0.1, 20, 105, 0.2, -75);
+
+roadLines(2, 0.1, 20, -80, 0.2, 0);
+roadLines(2, 0.1, 20, -80, 0.2, 25);
+roadLines(2, 0.1, 20, -80, 0.2, 50);
+roadLines(2, 0.1, 20, -80, 0.2, 75);
+roadLines(2, 0.1, 20, -80, 0.2, -25);
+roadLines(2, 0.1, 20, -80, 0.2, -50);
+roadLines(2, 0.1, 20, -80, 0.2, -75);
+
+
+roadLines(20, 0.1, 2, 13, 0.2, 35);
+roadLines(20, 0.1, 2, 38, 0.2, 35);
+roadLines(20, 0.1, 2, 63, 0.2, 35);
+roadLines(20, 0.1, 2, 88, 0.2, 35);
+roadLines(20, 0.1, 2, -13, 0.2, 35);
+roadLines(20, 0.1, 2, -38, 0.2, 35);
+roadLines(20, 0.1, 2, -63, 0.2, 35);
+
+roadLines(20, 0.1, 2, 13, 0.2, -40);
+roadLines(20, 0.1, 2, 38, 0.2, -40);
+roadLines(20, 0.1, 2, 63, 0.2, -40);
+roadLines(20, 0.1, 2, 88, 0.2, -40);
+roadLines(20, 0.1, 2, -13, 0.2, -40);
+roadLines(20, 0.1, 2, -38, 0.2, -40);
+roadLines(20, 0.1, 2, -63, 0.2, -40);
+
+
+//add a vertical line to the scene
+function verticalLine(x, y, z) {
+    const geometry = new THREE.BoxGeometry(0.5, 18, 0.5);
+    const material = new THREE.MeshBasicMaterial({ color: 0x404040 });
+    const cube = new THREE.Mesh(geometry, material);
+    cube.castShadow = true;
+    cube.receiveShadow = true;
+    cube.position.set(x, y, z);
+    scene.add(cube);
+}
+
+//lados das casas duplas
+verticalLine(119, 9, 0);
+
+verticalLine(119, 9, 29);
+
+verticalLine(119, 9, 58);
+
+verticalLine(119, 9, 105);
+
+verticalLine(119, 9, -26);
+
+verticalLine(119, 9, -51);
+
+verticalLine(121, 9, -108);
+
+verticalLine(119, 9, -84);
+
+//lado das casinhas pequeninas
+verticalLine(80, 9, 104);
+
+verticalLine(39, 9, 104);
+
+verticalLine(-10, 9, 104);
+
+
+
+
+
+
 
 
 
 //add a sphere to the scene
-const sphereGeometry = new THREE.SphereGeometry(30, 96, 96);
+const sphereGeometry = new THREE.SphereGeometry(5, 16, 16);
 const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0xffff66 });
 const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-sphere.position.set(-200, 100, 0);
+sphere.position.set(100, 100, 30);
 scene.add(sphere);
 
 const animate = function(time) {
