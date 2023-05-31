@@ -74,19 +74,19 @@ document.body.appendChild(renderer.domElement);
 
 
 //add a tree
-assetLoader.load(floor.href, function(gltf) {
-        const model = gltf.scene;
-        model.scale.set(20, 20, 20);
-        model.position.set(10, 0, 0);
+// assetLoader.load(floor.href, function(gltf) {
+//         const model = gltf.scene;
+//         model.scale.set(20, 20, 20);
+//         model.position.set(10, 0, 0);
 
-        model.castShadow = true;
-        model.receiveShadow = true;
+//         model.castShadow = true;
+//         model.receiveShadow = true;
 
-        scene.add(model);
-    }), undefined,
-    function(error) {
-        console.error(error);
-    };
+//         scene.add(model);
+//     }), undefined,
+//     function(error) {
+//         console.error(error);
+//     };
 
 
 
@@ -294,33 +294,82 @@ function verticalLine(x, y, z) {
 }
 
 //lados das casas duplas
-verticalLine(119, 9, 0);
+// verticalLine(119, 9, 0);
 
-verticalLine(119, 9, 29);
+// verticalLine(119, 9, 29);
 
-verticalLine(119, 9, 58);
+// verticalLine(119, 9, 58);
 
-verticalLine(119, 9, 105);
+// verticalLine(119, 9, 105);
 
-verticalLine(119, 9, -26);
+// verticalLine(119, 9, -26);
 
-verticalLine(119, 9, -51);
+// verticalLine(119, 9, -51);
 
-verticalLine(121, 9, -108);
+// verticalLine(121, 9, -108);
 
-verticalLine(119, 9, -84);
+// verticalLine(119, 9, -84);
 
-//lado das casinhas pequeninas
-verticalLine(80, 9, 104);
+// //lado das casinhas pequeninas
+// verticalLine(80, 9, 104);
 
-verticalLine(39, 9, 104);
+// verticalLine(39, 9, 104);
 
-verticalLine(-10, 9, 104);
+// verticalLine(-10, 9, 104);
+
+// verticalLine(-90, 9, 104);
 
 
+//create a car
 
+// Create a parent object for the car
+const carContainer = new THREE.Object3D();
+scene.add(carContainer);
 
+function createWheels() {
+    const geometry = new THREE.BoxBufferGeometry(2, 2, 5.5);
+    const material = new THREE.MeshLambertMaterial({ color: 0x333333 });
+    const wheel = new THREE.Mesh(geometry, material);
+    return wheel;
+}
 
+function createCar() {
+    const car = new THREE.Group();
+
+    const backWheel = createWheels();
+    backWheel.position.y = 1;
+    backWheel.position.x = -3;
+    car.add(backWheel);
+
+    const frontWheel = createWheels();
+    frontWheel.position.y = 1;
+    frontWheel.position.x = 3;
+    car.add(frontWheel);
+
+    const main = new THREE.Mesh(
+        new THREE.BoxBufferGeometry(10, 2.5, 5),
+        new THREE.MeshLambertMaterial({ color: 0x78b14b })
+    );
+    main.position.y = 2;
+    car.add(main);
+
+    const cabin = new THREE.Mesh(
+        new THREE.BoxBufferGeometry(5.5, 2, 4),
+        new THREE.MeshLambertMaterial({ color: 0xffffff })
+    );
+    cabin.position.x = -1;
+    cabin.position.y = 4.25;
+    car.add(cabin);
+
+    // Add the car to the parent container
+    carContainer.add(car);
+
+    return car;
+}
+
+const car = createCar();
+
+// Animate the car
 
 
 
@@ -335,8 +384,15 @@ scene.add(sphere);
 const animate = function(time) {
     requestAnimationFrame(animate);
 
-    sphere.rotation.x = time / 1000;
 
+    renderer.render(scene, camera);
+
+    requestAnimationFrame(animate);
+
+    // Rotate the car container to simulate motion
+    carContainer.position.x += 0.1;
+
+    // Render the scene
     renderer.render(scene, camera);
 }
 
