@@ -1,14 +1,11 @@
 import * as THREE from 'three';
-//import Stats from 'three/addons/libs/stats.min.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import * as dat from 'three/addons/libs/lil-gui.module.min.js';
 
 
-const ligths = new URL('../../assets/ligths.glb',
-    import.meta.url);
 
-const floor = new URL('../../assets/houses.glb',
+const floor = new URL('../../assets/last.glb',
     import.meta.url);
 
 const assetLoader = new GLTFLoader();
@@ -19,31 +16,6 @@ const scene = new THREE.Scene();
 const renderer = new THREE.WebGLRenderer();
 
 renderer.shadowMap.enabled = true
-
-const gui = new dat.GUI();
-
-const options = {
-    darkMode: false
-};
-
-gui.add(options, 'darkMode').name('Dark Mode').onChange(function(e) {
-    if (e) {
-        scene.background = null;
-        planeMaterial.color.set(0x994c00);
-        sphereMaterial.color.set(0xffffff);
-        planeMaterial1.color.set(0x4c9900);
-        circleMaterial.color.set(0x004c99);
-        //rectangleGeometry.color.set(0x606060);
-    } else {
-        scene.background = darkMaterial;
-        planeMaterial.color.set(0xcd853f);
-        sphereMaterial.color.set(0xffff99);
-        planeMaterial1.color.set(0xb2ff66);
-        circleMaterial.color.set(0x99ccff);
-        //rectangleGeometry.color.set(0x606060);
-
-    }
-});
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
@@ -71,6 +43,19 @@ renderer.setClearColor(0xcccccc);
 renderer.setSize(window.innerWidth, window.innerHeight);
 
 document.body.appendChild(renderer.domElement);
+
+const gui = new dat.GUI();
+
+const options = {
+    speed: 0.1
+};
+
+gui.add(options, 'speed', 0, 1);
+
+let step = 0;
+
+
+
 
 
 //add a tree
@@ -293,38 +278,8 @@ function verticalLine(x, y, z) {
     scene.add(cube);
 }
 
-//lados das casas duplas
-// verticalLine(119, 9, 0);
-
-// verticalLine(119, 9, 29);
-
-// verticalLine(119, 9, 58);
-
-// verticalLine(119, 9, 105);
-
-// verticalLine(119, 9, -26);
-
-// verticalLine(119, 9, -51);
-
-// verticalLine(121, 9, -108);
-
-// verticalLine(119, 9, -84);
-
-// //lado das casinhas pequeninas
-// verticalLine(80, 9, 104);
-
-// verticalLine(39, 9, 104);
-
-// verticalLine(-10, 9, 104);
-
-// verticalLine(-90, 9, 104);
-
 
 //create a car
-
-// Create a parent object for the car
-const carContainer = new THREE.Object3D();
-scene.add(carContainer);
 
 function createWheels() {
     const geometry = new THREE.BoxBufferGeometry(2, 2, 5.5);
@@ -359,17 +314,115 @@ function createCar() {
     );
     cabin.position.x = -1;
     cabin.position.y = 4.25;
+    car.castShadow = true;
+    car.receiveShadow = true;
     car.add(cabin);
-
-    // Add the car to the parent container
-    carContainer.add(car);
 
     return car;
 }
 
 const car = createCar();
+car.position.set(-150, 0, 100); // Set the position of the car
+car.castShadow = true;
+car.receiveShadow = true;
+scene.add(car);
 
-// Animate the car
+
+function createWheels1() {
+    const geometry = new THREE.BoxBufferGeometry(2, 2, 5.5);
+    const material = new THREE.MeshLambertMaterial({ color: 0x333333 });
+    const wheel = new THREE.Mesh(geometry, material);
+    return wheel;
+}
+
+function createCar1() {
+    const car1 = new THREE.Group();
+
+    const backWheel = createWheels1();
+    backWheel.position.y = 1;
+    backWheel.position.x = -3;
+    car1.add(backWheel);
+
+    const frontWheel = createWheels1();
+    frontWheel.position.y = 1;
+    frontWheel.position.x = 3;
+    car1.add(frontWheel);
+
+    const main = new THREE.Mesh(
+        new THREE.BoxBufferGeometry(10, 2.5, 5),
+        new THREE.MeshLambertMaterial({ color: 0xffff99 })
+    );
+    main.position.y = 2;
+    car1.add(main);
+
+    const cabin = new THREE.Mesh(
+        new THREE.BoxBufferGeometry(5.5, 2, 4),
+        new THREE.MeshLambertMaterial({ color: 0xffffff })
+    );
+    cabin.position.x = -1;
+    cabin.position.y = 4.25;
+    car1.add(cabin);
+
+    car1.castShadow = true;
+    car1.receiveShadow = true;
+
+    return car1;
+}
+
+const car1 = createCar1();
+car1.position.set(-150, 0, -90); // Set the position of the car
+car1.castShadow = true;
+car1.receiveShadow = true;
+scene.add(car1);
+
+
+function createWheels2() {
+    const geometry = new THREE.BoxBufferGeometry(2, 2, 5.5);
+    const material = new THREE.MeshLambertMaterial({ color: 0x333333 });
+    const wheel = new THREE.Mesh(geometry, material);
+    return wheel;
+}
+
+function createCar2() {
+    const car2 = new THREE.Group();
+
+    const backWheel = createWheels2();
+    backWheel.position.y = 1;
+    backWheel.position.x = -3;
+    car2.add(backWheel);
+
+    const frontWheel = createWheels2();
+    frontWheel.position.y = 1;
+    frontWheel.position.x = 3;
+    car2.add(frontWheel);
+
+    const main = new THREE.Mesh(
+        new THREE.BoxBufferGeometry(10, 2.5, 5),
+        new THREE.MeshLambertMaterial({ color: 0xccffff })
+    );
+    main.position.y = 2;
+    car2.add(main);
+
+    const cabin = new THREE.Mesh(
+        new THREE.BoxBufferGeometry(5.5, 2, 4),
+        new THREE.MeshLambertMaterial({ color: 0xffffff })
+    );
+    cabin.position.x = -1;
+    cabin.position.y = 4.25;
+    car2.add(cabin);
+
+    return car2;
+}
+
+const car2 = createCar2();
+car2.position.set(-75, 0, -80); // Set the position of the car
+//rotate 360 degrees
+car2.rotation.y = Math.PI / 2;
+car2.castShadow = true;
+car2.receiveShadow = true;
+scene.add(car2);
+
+
 
 
 
@@ -381,21 +434,100 @@ const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 sphere.position.set(100, 100, 30);
 scene.add(sphere);
 
-const animate = function(time) {
+const rectangleWidth = 220;
+const rectangleLength = 140;
+// Define the speed of the car
+
+
+// Define the direction of movement
+let direction = 1; // 1: Right, 2: Down, 3: Left, 4: Up
+
+let direction1 = 1;
+
+function animate() {
+
+    step = options.speed;
+    // Move the car horizontally along the road lines
+    if (direction === 1) {
+        car.position.x += step;
+        car.rotation.y = 0; // Rotate the car to face right
+        if (car.position.x > rectangleWidth / 2) {
+            car.position.x = rectangleWidth / 2;
+            direction = 2;
+        }
+    } else if (direction === 2) {
+        car.position.z -= step;
+        car.rotation.y = Math.PI / 2; // Rotate the car to face down
+        if (car.position.z < 100 - rectangleLength / 2) {
+            car.position.z = 100 - rectangleLength / 2;
+            direction = 3;
+        }
+    } else if (direction === 3) {
+        car.position.x -= step;
+        car.rotation.y = Math.PI; // Rotate the car to face left
+        if (car.position.x < (-rectangleWidth + 50) / 2) {
+            car.position.x = (-rectangleWidth + 50) / 2;
+            direction = 4;
+        }
+    } else if (direction === 4) {
+        car.position.z += step;
+        car.rotation.y = (3 * Math.PI) / 2; // Rotate the car to face up
+        if (car.position.z > 100) {
+            car.position.z = 100;
+            direction = 1;
+        }
+    }
+
+    //yellow car
+    // if (direction1 === 1) {
+    //     car1.position.x += speed;
+    //     car1.rotation.y = 0; // Rotate the car to face right
+    //     if (car1.position.x > rectangleWidth + 10 / 2) {
+    //         car1.position.x = rectangleWidth + 10 / 2;
+    //         direction1 = 4;
+    //     }
+    // } else if (direction1 === 2) {
+    //     car1.position.z -= speed;
+    //     car1.rotation.y = Math.PI / 2; // Rotate the car to face down
+    //     if (car1.position.z < 100 - rectangleLength / 2) {
+    //         car1.position.z = 100 - rectangleLength / 2;
+    //         direction1 = 1;
+    //     }
+    // } else if (direction1 === 3) {
+    //     car1.position.x -= speed;
+    //     car1.rotation.y = Math.PI; // Rotate the car to face left
+    //     if (car1.position.x < (-rectangleWidth + 50) / 2) {
+    //         car1.position.x = (-rectangleWidth + 50) / 2;
+    //         direction1 = 2;
+    //     }
+    // } else if (direction1 === 4) {
+    //     car1.position.z += speed;
+    //     car1.rotation.y = (3 * Math.PI) / 2; // Rotate the car to face up
+    //     if (car1.position.z > 100) {
+    //         car1.position.z = 100;
+    //         direction1 = 3;
+    //     }
+    // }
+
+
+
+
+
+    // Request the next frame
     requestAnimationFrame(animate);
 
 
-    renderer.render(scene, camera);
+    car2.position.z += 0.1; // Adjust the speed as per your requirement
 
-    requestAnimationFrame(animate);
+    // Reset the position of the car if it goes beyond the road
+    if (car2.position.z > 80) {
+        car2.position.z = -80;
+    }
 
-    // Rotate the car container to simulate motion
-    carContainer.position.x += 0.1;
-
-    // Render the scene
     renderer.render(scene, camera);
 }
 
+animate();
 renderer.setAnimationLoop(animate);
 
 
