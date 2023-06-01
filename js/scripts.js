@@ -36,7 +36,7 @@ light2.castShadow = true;
 scene.add(light2);
 
 
-camera.position.set(30, 80, 160);
+camera.position.set(100, 100, 130);
 controls.update();
 
 //background color
