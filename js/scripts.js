@@ -88,19 +88,19 @@ gui.add(options, 'light').onChange(function(value) {
 
 
 //add a tree
-// assetLoader.load(floor.href, function(gltf) {
-//         const model = gltf.scene;
-//         model.scale.set(20, 20, 20);
-//         model.position.set(10, 0, 0);
+assetLoader.load(floor.href, function(gltf) {
+        const model = gltf.scene;
+        model.scale.set(20, 20, 20);
+        model.position.set(10, 0, 0);
 
-//         model.castShadow = true;
-//         model.receiveShadow = true;
+        model.castShadow = true;
+        model.receiveShadow = true;
 
-//         scene.add(model);
-//     }), undefined,
-//     function(error) {
-//         console.error(error);
-//     };
+        scene.add(model);
+    }), undefined,
+    function(error) {
+        console.error(error);
+    };
 
 
 //add a plane to the scene
