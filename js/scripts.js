@@ -19,10 +19,12 @@ renderer.shadowMap.enabled = true
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
+
 const controls = new OrbitControls(camera, renderer.domElement);
 
-const axesHelper = new THREE.AxesHelper(5);
-scene.add(axesHelper);
+
+
+
 
 //add a light to the scene
 const light = new THREE.PointLight(0xffffff, 1, 1000);
@@ -30,16 +32,26 @@ light.position.set(100, 100, 30);
 light.castShadow = true;
 scene.add(light);
 
+
+
+
 //add a light to the scene
 const light2 = new THREE.AmbientLight(0xffffff, 0.5);
+light2.castShadow = true;
 scene.add(light2);
 
 
-camera.position.set(50, 100, 200);
+const light1 = new THREE.PointLight(0xffffff, 1, 0.5);
+light1.position.set(50, 50, 50);
+light1.castShadow = true;
+scene.add(light);
+
+
+camera.position.set(30, 80, 160);
 controls.update();
 
 //background color
-renderer.setClearColor(0xcccccc);
+renderer.setClearColor(0xccffff);
 renderer.setSize(window.innerWidth, window.innerHeight);
 
 document.body.appendChild(renderer.domElement);
@@ -47,31 +59,50 @@ document.body.appendChild(renderer.domElement);
 const gui = new dat.GUI();
 
 const options = {
-    speed: 0.1
+    Green_Car: 0,
+    light: true,
+    sphereMaterial: '#ff0000',
+    light1: true,
+    Yellow_Car: 0,
+    Blue_Car: 0,
 };
 
-gui.add(options, 'speed', 0, 1);
+gui.add(options, 'Green_Car', 0, 1);
+gui.add(options, 'Yellow_Car', 0, 1);
+gui.add(options, 'Blue_Car', 0, 1);
 
-let step = 0;
+gui.add(options, 'light').onChange(function(value) {
+        if (value) {
+            scene.add(light);
+            sphereMaterial.color.setHex(0xffff99);
+            renderer.setClearColor(0xccffff);
 
 
+        } else {
+            scene.remove(light);
+            sphereMaterial.color.setHex(0xffffff);
+            renderer.setClearColor(0x009999);
+            scene.add(light2);
+        }
+    }
 
+);
 
 
 //add a tree
-// assetLoader.load(floor.href, function(gltf) {
-//         const model = gltf.scene;
-//         model.scale.set(20, 20, 20);
-//         model.position.set(10, 0, 0);
+assetLoader.load(floor.href, function(gltf) {
+        const model = gltf.scene;
+        model.scale.set(20, 20, 20);
+        model.position.set(10, 0, 0);
 
-//         model.castShadow = true;
-//         model.receiveShadow = true;
+        model.castShadow = true;
+        model.receiveShadow = true;
 
-//         scene.add(model);
-//     }), undefined,
-//     function(error) {
-//         console.error(error);
-//     };
+        scene.add(model);
+    }), undefined,
+    function(error) {
+        console.error(error);
+    };
 
 
 
@@ -322,7 +353,7 @@ function createCar() {
 }
 
 const car = createCar();
-car.position.set(-150, 0, 100); // Set the position of the car
+car.position.set(-140, 0, 100); // Set the position of the car
 car.castShadow = true;
 car.receiveShadow = true;
 scene.add(car);
@@ -370,7 +401,7 @@ function createCar1() {
 }
 
 const car1 = createCar1();
-car1.position.set(-150, 0, -90); // Set the position of the car
+car1.position.set(-140, 0, -90); // Set the position of the car
 car1.castShadow = true;
 car1.receiveShadow = true;
 scene.add(car1);
@@ -415,7 +446,7 @@ function createCar2() {
 }
 
 const car2 = createCar2();
-car2.position.set(-75, 0, -80); // Set the position of the car
+car2.position.set(100, 0, -100); // Set the position of the car
 //rotate 360 degrees
 car2.rotation.y = Math.PI / 2;
 car2.castShadow = true;
@@ -429,14 +460,20 @@ scene.add(car2);
 
 //add a sphere to the scene
 const sphereGeometry = new THREE.SphereGeometry(5, 16, 16);
-const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0xffff66 });
+const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0xffff99 });
 const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 sphere.position.set(100, 100, 30);
 scene.add(sphere);
 
+
 const rectangleWidth = 220;
 const rectangleLength = 140;
 // Define the speed of the car
+
+const rectangleLength1 = 100;
+const rectangleWidth1 = 100;
+
+
 
 
 // Define the direction of movement
@@ -444,9 +481,17 @@ let direction = 1; // 1: Right, 2: Down, 3: Left, 4: Up
 
 let direction1 = 1;
 
+let direction2 = 1;
+
+let step = 0;
+let step1 = 0;
+let step2 = 0;
+
 function animate() {
 
-    step = options.speed;
+    step = options.Green_Car;
+    step1 = options.Yellow_Car;
+    step2 = options.Blue_Car;
     // Move the car horizontally along the road lines
     if (direction === 1) {
         car.position.x += step;
@@ -478,51 +523,76 @@ function animate() {
         }
     }
 
-    //yellow car
-    // if (direction1 === 1) {
-    //     car1.position.x += speed;
-    //     car1.rotation.y = 0; // Rotate the car to face right
-    //     if (car1.position.x > rectangleWidth + 10 / 2) {
-    //         car1.position.x = rectangleWidth + 10 / 2;
-    //         direction1 = 4;
-    //     }
-    // } else if (direction1 === 2) {
-    //     car1.position.z -= speed;
-    //     car1.rotation.y = Math.PI / 2; // Rotate the car to face down
-    //     if (car1.position.z < 100 - rectangleLength / 2) {
-    //         car1.position.z = 100 - rectangleLength / 2;
-    //         direction1 = 1;
-    //     }
-    // } else if (direction1 === 3) {
-    //     car1.position.x -= speed;
-    //     car1.rotation.y = Math.PI; // Rotate the car to face left
-    //     if (car1.position.x < (-rectangleWidth + 50) / 2) {
-    //         car1.position.x = (-rectangleWidth + 50) / 2;
-    //         direction1 = 2;
-    //     }
-    // } else if (direction1 === 4) {
-    //     car1.position.z += speed;
-    //     car1.rotation.y = (3 * Math.PI) / 2; // Rotate the car to face up
-    //     if (car1.position.z > 100) {
-    //         car1.position.z = 100;
-    //         direction1 = 3;
-    //     }
-    // }
 
-
-
-
-
-    // Request the next frame
-    requestAnimationFrame(animate);
-
-
-    car2.position.z += 0.1; // Adjust the speed as per your requirement
-
-    // Reset the position of the car if it goes beyond the road
-    if (car2.position.z > 80) {
-        car2.position.z = -80;
+    // yellow car
+    if (direction1 === 1) {
+        car1.position.x += step1; // Move the car to the right
+        car1.rotation.y = 0; // Rotate the car to face right
+        if (car1.position.x >= 110) {
+            car1.position.x = 110;
+            direction1 = 2; // Change direction to move down
+        }
+    } else if (direction1 === 2) {
+        car1.position.z -= step1; // Move the car down
+        car1.rotation.y = Math.PI / 2; // Rotate the car to face down
+        if (car1.position.z <= -100) {
+            car1.position.z = -100;
+            direction1 = 3; // Change direction to move left
+        }
+    } else if (direction1 === 3) {
+        car1.position.x -= step1; // Move the car to the left
+        car1.rotation.y = Math.PI; // Rotate the car to face left
+        if (car1.position.x <= -85) {
+            car1.position.x = -85;
+            direction1 = 4; // Change direction to move up
+        }
+    } else if (direction1 === 4) {
+        car1.position.z += step1; // Move the car up
+        car1.rotation.y = (3 * Math.PI) / 2; // Rotate the car to face up
+        if (car1.position.z >= -35) {
+            car1.position.z = -35;
+            direction1 = 1; // Change direction to move right
+        }
     }
+
+
+
+    // blue car
+    if (direction2 === 1) {
+        car2.position.x += step2; // Move the car to the right
+        car2.rotation.y = 0; // Rotate the car to face right
+        if (car2.position.x >= 110) {
+            car2.position.x = 110;
+            direction2 = 2; // Change direction to move down
+        }
+    } else if (direction2 === 2) {
+        car2.position.z -= step2; // Move the car down
+        car2.rotation.y = Math.PI / 2; // Rotate the car to face down
+        if (car2.position.z <= -100) {
+            car2.position.z = -100;
+            direction2 = 3; // Change direction to move left
+        }
+    } else if (direction2 === 3) {
+        car2.position.x -= step2; // Move the car to the left
+        car2.rotation.y = Math.PI; // Rotate the car to face left
+        if (car2.position.x <= -85) {
+            car2.position.x = -85;
+            direction2 = 4; // Change direction to move up
+        }
+    } else if (direction2 === 4) {
+        car2.position.z += step2; // Move the car up
+        car2.rotation.y = (3 * Math.PI) / 2; // Rotate the car to face up
+        if (car2.position.z >= 100) {
+            car2.position.z = 100;
+            direction2 = 1; // Change direction to move right
+        }
+    }
+
+
+
+    controls.update();
+
+    requestAnimationFrame(animate);
 
     renderer.render(scene, camera);
 }
