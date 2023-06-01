@@ -55,6 +55,7 @@ const options = {
     light: true,
     light1: true,
     planeMaterial: '#4c9900',
+    rendererColor: '#ccffff',
 };
 
 gui.add(options, 'Green_Car', 0, 1);
@@ -64,6 +65,13 @@ gui.add(options, 'Blue_Car', 0, 1);
 gui.addColor(options, 'planeMaterial').onChange(function(e) {
     plane.material.color.set(e);
 });
+
+gui.addColor(options, 'rendererColor').onChange(function(e) {
+    renderer.setClearColor(e);
+});
+
+
+
 
 
 
