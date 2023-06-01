@@ -23,9 +23,6 @@ const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerH
 const controls = new OrbitControls(camera, renderer.domElement);
 
 
-
-
-
 //add a light to the scene
 const light = new THREE.PointLight(0xffffff, 1, 1000);
 light.position.set(100, 100, 30);
@@ -33,18 +30,10 @@ light.castShadow = true;
 scene.add(light);
 
 
-
-
 //add a light to the scene
 const light2 = new THREE.AmbientLight(0xffffff, 0.5);
 light2.castShadow = true;
 scene.add(light2);
-
-
-const light1 = new THREE.PointLight(0xffffff, 1, 0.5);
-light1.position.set(50, 50, 50);
-light1.castShadow = true;
-scene.add(light);
 
 
 camera.position.set(30, 80, 160);
@@ -56,20 +45,29 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 
 document.body.appendChild(renderer.domElement);
 
+
 const gui = new dat.GUI();
 
 const options = {
     Green_Car: 0,
-    light: true,
-    sphereMaterial: '#ff0000',
-    light1: true,
     Yellow_Car: 0,
     Blue_Car: 0,
+    light: true,
+    light1: true,
+    planeMaterial: '#4c9900',
 };
 
 gui.add(options, 'Green_Car', 0, 1);
 gui.add(options, 'Yellow_Car', 0, 1);
 gui.add(options, 'Blue_Car', 0, 1);
+
+gui.addColor(options, 'planeMaterial').onChange(function(e) {
+    plane.material.color.set(e);
+});
+
+
+
+
 
 gui.add(options, 'light').onChange(function(value) {
         if (value) {
@@ -90,24 +88,23 @@ gui.add(options, 'light').onChange(function(value) {
 
 
 //add a tree
-assetLoader.load(floor.href, function(gltf) {
-        const model = gltf.scene;
-        model.scale.set(20, 20, 20);
-        model.position.set(10, 0, 0);
+// assetLoader.load(floor.href, function(gltf) {
+//         const model = gltf.scene;
+//         model.scale.set(20, 20, 20);
+//         model.position.set(10, 0, 0);
 
-        model.castShadow = true;
-        model.receiveShadow = true;
+//         model.castShadow = true;
+//         model.receiveShadow = true;
 
-        scene.add(model);
-    }), undefined,
-    function(error) {
-        console.error(error);
-    };
-
+//         scene.add(model);
+//     }), undefined,
+//     function(error) {
+//         console.error(error);
+//     };
 
 
 //add a plane to the scene
-const planeGeometry = new THREE.PlaneGeometry(310, 250, 1);
+const planeGeometry = new THREE.PlaneGeometry(310, 250, 10);
 const planeMaterial = new THREE.MeshLambertMaterial({ color: 0x4c9900 });
 const plane = new THREE.Mesh(planeGeometry, planeMaterial);
 plane.rotation.x = -0.5 * Math.PI;
@@ -116,7 +113,7 @@ plane.receiveShadow = true;
 plane.castShadow = true;
 scene.add(plane);
 
-
+//add buildings to the scene
 function geometry(a, l, p, x, y, z) {
     //add a rectangle to the scene
     const rectangleGeometry = new THREE.BoxGeometry(a, l, p); //comprimento,altura,profundidade
@@ -127,6 +124,29 @@ function geometry(a, l, p, x, y, z) {
     rectangle.receiveShadow = true;
     scene.add(rectangle);
 }
+
+//add a road to the scene
+function road(l, p, a, x, y, z) {
+    const roadGeometry = new THREE.BoxGeometry(l, p, a);
+    const roadMaterial = new THREE.MeshLambertMaterial({ color: 0xc0c0c0 });
+    const road = new THREE.Mesh(roadGeometry, roadMaterial);
+    road.position.set(x, y, z);
+    road.castShadow = true;
+    road.receiveShadow = true;
+    scene.add(road);
+}
+
+//add road lines to the scene
+function roadLines(l, p, a, x, y, z) {
+    const roadLinesGeometry = new THREE.BoxGeometry(l, p, a);
+    const roadLinesMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff });
+    const roadLines = new THREE.Mesh(roadLinesGeometry, roadLinesMaterial);
+    roadLines.position.set(x, y, z);
+    roadLines.castShadow = true;
+    roadLines.receiveShadow = true;
+    scene.add(roadLines);
+}
+
 
 geometry(10, 40, 10, 70, 20, -13);
 geometry(20, 40, 10, 50, 20, 10);
@@ -200,18 +220,6 @@ geometry(6, 20, 7, -116, 11, -111);
 geometry(20, 19, 35, -110, 10, 3);
 
 
-
-//add a road to the scene
-function road(l, p, a, x, y, z) {
-    const roadGeometry = new THREE.BoxGeometry(l, p, a);
-    const roadMaterial = new THREE.MeshLambertMaterial({ color: 0xc0c0c0 });
-    const road = new THREE.Mesh(roadGeometry, roadMaterial);
-    road.position.set(x, y, z);
-    road.castShadow = true;
-    road.receiveShadow = true;
-    scene.add(road);
-}
-
 road(310, 0.1, 20, 5, 0.1, 93);
 road(310, 0.1, 20, 5, 0.1, -95);
 
@@ -221,16 +229,6 @@ road(20, 0.1, 200, -80, 0.1, 0);
 road(166, 0.1, 20, 13, 0.1, 35);
 road(166, 0.1, 15, 13, 0.1, -40);
 
-//add road lines to the scene
-function roadLines(l, p, a, x, y, z) {
-    const roadLinesGeometry = new THREE.BoxGeometry(l, p, a);
-    const roadLinesMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff });
-    const roadLines = new THREE.Mesh(roadLinesGeometry, roadLinesMaterial);
-    roadLines.position.set(x, y, z);
-    roadLines.castShadow = true;
-    roadLines.receiveShadow = true;
-    scene.add(roadLines);
-}
 
 roadLines(20, 0.1, 2, -5, 0.2, 93);
 roadLines(20, 0.1, 2, -30, 0.2, 93);
@@ -298,17 +296,6 @@ roadLines(20, 0.1, 2, -38, 0.2, -40);
 roadLines(20, 0.1, 2, -63, 0.2, -40);
 
 
-//add a vertical line to the scene
-function verticalLine(x, y, z) {
-    const geometry = new THREE.BoxGeometry(0.5, 18, 0.5);
-    const material = new THREE.MeshBasicMaterial({ color: 0x404040 });
-    const cube = new THREE.Mesh(geometry, material);
-    cube.castShadow = true;
-    cube.receiveShadow = true;
-    cube.position.set(x, y, z);
-    scene.add(cube);
-}
-
 
 //create a car
 
@@ -337,6 +324,9 @@ function createCar() {
         new THREE.MeshLambertMaterial({ color: 0x78b14b })
     );
     main.position.y = 2;
+    main.castShadow = true;
+    main.receiveShadow = true;
+
     car.add(main);
 
     const cabin = new THREE.Mesh(
@@ -384,6 +374,8 @@ function createCar1() {
         new THREE.MeshLambertMaterial({ color: 0xffff99 })
     );
     main.position.y = 2;
+    main.castShadow = true;
+    main.receiveShadow = true;
     car1.add(main);
 
     const cabin = new THREE.Mesh(
@@ -427,11 +419,14 @@ function createCar2() {
     frontWheel.position.x = 3;
     car2.add(frontWheel);
 
+
     const main = new THREE.Mesh(
         new THREE.BoxBufferGeometry(10, 2.5, 5),
         new THREE.MeshLambertMaterial({ color: 0xccffff })
     );
     main.position.y = 2;
+    main.castShadow = true;
+    main.receiveShadow = true;
     car2.add(main);
 
     const cabin = new THREE.Mesh(
@@ -454,10 +449,6 @@ car2.receiveShadow = true;
 scene.add(car2);
 
 
-
-
-
-
 //add a sphere to the scene
 const sphereGeometry = new THREE.SphereGeometry(5, 16, 16);
 const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0xffff99 });
@@ -468,12 +459,6 @@ scene.add(sphere);
 
 const rectangleWidth = 220;
 const rectangleLength = 140;
-// Define the speed of the car
-
-const rectangleLength1 = 100;
-const rectangleWidth1 = 100;
-
-
 
 
 // Define the direction of movement
@@ -588,8 +573,6 @@ function animate() {
         }
     }
 
-
-
     controls.update();
 
     requestAnimationFrame(animate);
@@ -599,7 +582,6 @@ function animate() {
 
 animate();
 renderer.setAnimationLoop(animate);
-
 
 
 window.onresize = function() {
