@@ -4,6 +4,10 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import * as dat from 'three/addons/libs/lil-gui.module.min.js';
 
 
+const textureLoader = new THREE.TextureLoader();
+const roadTexture = textureLoader.load('../../assets/road.jpg');
+
+
 
 const floor = new URL('../../assets/last.glb',
     import.meta.url);
@@ -25,7 +29,7 @@ const controls = new OrbitControls(camera, renderer.domElement);
 
 //add a light to the scene
 const light = new THREE.PointLight(0xffffff, 1, 1000);
-light.position.set(100, 100, 30);
+light.position.set(100, 100, 130);
 light.castShadow = true;
 scene.add(light);
 
@@ -69,13 +73,6 @@ gui.addColor(options, 'planeMaterial').onChange(function(e) {
 gui.addColor(options, 'rendererColor').onChange(function(e) {
     renderer.setClearColor(e);
 });
-
-
-
-
-
-
-
 
 gui.add(options, 'light').onChange(function(value) {
         if (value) {
@@ -136,7 +133,7 @@ function geometry(a, l, p, x, y, z) {
 //add a road to the scene
 function road(l, p, a, x, y, z) {
     const roadGeometry = new THREE.BoxGeometry(l, p, a);
-    const roadMaterial = new THREE.MeshLambertMaterial({ color: 0xc0c0c0 });
+    const roadMaterial = new THREE.MeshLambertMaterial({ map: roadTexture });
     const road = new THREE.Mesh(roadGeometry, roadMaterial);
     road.position.set(x, y, z);
     road.castShadow = true;
@@ -231,7 +228,7 @@ geometry(20, 19, 35, -110, 10, 3);
 road(310, 0.1, 20, 5, 0.1, 93);
 road(310, 0.1, 20, 5, 0.1, -95);
 
-road(20, 0.1, 200, 105, 0.1, 0);
+road(20, 0.1, 170, 105, 0.1, 0);
 road(20, 0.1, 200, -80, 0.1, 0);
 
 road(166, 0.1, 20, 13, 0.1, 35);
@@ -461,7 +458,7 @@ scene.add(car2);
 const sphereGeometry = new THREE.SphereGeometry(5, 16, 16);
 const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0xffff99 });
 const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-sphere.position.set(100, 100, 30);
+sphere.position.set(100, 100, 130);
 scene.add(sphere);
 
 
